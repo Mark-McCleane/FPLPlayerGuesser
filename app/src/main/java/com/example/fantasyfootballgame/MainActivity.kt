@@ -1,11 +1,11 @@
 package com.example.fantasyfootballgame
 
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.fantasyfootballgame.adapter.FplPlayerGuesserAutofillAdapter
@@ -99,15 +99,35 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayPlayerItem() {
-        val playerNameTextView:TextView = findViewById(R.id.text_player_web_name)
-        val xGoalsTextView:TextView = findViewById(R.id.text_player_expected_goals)
-        val xAssistsTextView:TextView = findViewById(R.id.text_player_expected_assists)
-        val teamTextView:TextView = findViewById(R.id.text_team)
+        val cardView: CardView = findViewById(R.id.item_player_cardview)
+        val playerNameTextView: TextView = findViewById(R.id.text_player_web_name)
+        val fplPointsTextView: TextView = findViewById(R.id.text_player_points)
+        val fplPositionTextView: TextView = findViewById(R.id.text_player_position)
+        val teamTextView: TextView = findViewById(R.id.text_team)
 
-        playerNameTextView.text = getString(R.string.player_name_in_display_player_item,mRandomElement?.firstName, mRandomElement?.secondName)
-        xGoalsTextView.text = getString(R.string.expected_goals_in_display_player_item, mRandomElement?.expectedGoals)
-        xAssistsTextView.text = getString(R.string.expected_assists_in_display_player_item, mRandomElement?.expectedAssists)
-        teamTextView.text = getString(R.string.team_in_display_player_item, mRandomElement?.team.toString())
+        val fplPlayerPosition: String = mRandomElement?.elementType?.let {
+            when (it) {
+                1 -> "GK"
+                2 -> "DEF"
+                3 -> "MID"
+                4 -> "ATT"
+                else -> "INVALID"
+            }
+        } ?: "INVALID"
+
+
+        cardView.visibility = View.VISIBLE
+        playerNameTextView.text = getString(
+            R.string.player_name_in_display_player_item,
+            mRandomElement?.firstName,
+            mRandomElement?.secondName
+        )
+        fplPointsTextView.text =
+            getString(R.string.fpl_points_in_display_player_item, mRandomElement?.totalPoints)
+        fplPositionTextView.text =
+            getString(R.string.fpl_position_in_display_player_item, fplPlayerPosition)
+        teamTextView.text =
+            getString(R.string.team_in_display_player_item, mRandomElement?.team.toString())
     }
 
     private fun getData() {

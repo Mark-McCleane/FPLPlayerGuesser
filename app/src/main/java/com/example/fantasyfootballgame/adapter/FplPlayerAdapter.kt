@@ -13,8 +13,8 @@ import com.example.fantasyfootballgame.model.BoostrapStatic.FplPlayer
 class FplPlayerAdapter : RecyclerView.Adapter<FplPlayerAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val playerNameTextView: TextView = itemView.findViewById(R.id.text_player_web_name)
-        val playerXGoalsTextView: TextView = itemView.findViewById(R.id.text_player_expected_goals)
-        val playerXAssistsTextView: TextView = itemView.findViewById(R.id.text_player_expected_assists)
+        val playerXGoalsTextView: TextView = itemView.findViewById(R.id.text_player_points)
+        val playerXAssistsTextView: TextView = itemView.findViewById(R.id.text_player_position)
 //        val playerTransferInTextView: TextView = itemView.findViewById(R.id.image_player_avatar)
     }
 

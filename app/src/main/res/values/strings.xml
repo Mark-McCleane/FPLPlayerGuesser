@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">FantasyFootballGame</string>
     <string name="player_name_in_display_player_item">Player Name: %s %s</string>
-    <string name="expected_goals_in_display_player_item">Expected Goals(xG): %s</string>
-    <string name="expected_assists_in_display_player_item">Expected Assists(xA): %s</string>
+    <string name="fpl_points_in_display_player_item">Total FPL Points: %d</string>
+    <string name="fpl_position_in_display_player_item">Position: %s</string>
     <string name="team_in_display_player_item">Team: %s</string>
 </resources>
