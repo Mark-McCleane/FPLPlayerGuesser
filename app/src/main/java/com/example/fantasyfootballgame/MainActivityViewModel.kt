@@ -76,4 +76,46 @@ class MainActivityViewModel(
         }
         return fullNameList
     }
+
+    fun convertPositionIdToFplPosition(randomElement: FplPlayer?): String {
+        return randomElement?.elementType?.let {
+            when (it) {
+                1 -> "GK"
+                2 -> "DEF"
+                3 -> "MID"
+                4 -> "ATT"
+                else -> "INVALID"
+            }
+        } ?: "INVALID"
+    }
+
+    fun convertTeamIdToFplTeam(mRandomElement: FplPlayer?): String {
+        return mRandomElement?.team?.let {
+            when (it) {
+                1 -> "Arsenal"
+                2 -> "Aston Villa FC"
+                3 -> "Bournemouth AFC"
+                4 -> "Brentford"
+                5 -> "Brighton & Hove Albion"
+                6 -> "Burnley FC"
+                7 -> "Chelsea FC"
+                8 -> "Crystal Palace FC"
+                9 -> "Everton FC"
+                10 -> "Fulham FC"
+                11 -> "Liverpool FC"
+                12 -> "Luton Town FC"
+                13 -> "Manchester City FC"
+                14 -> "Manchester United FC"
+                15 -> "Newcastle United FC"
+                16 -> "Nottingham Forest FC"
+                17 -> "Sheffield United FC"
+                18 -> "Tottenham Hotspur FC"
+                19 -> "West Ham United FC"
+                20 -> "Wolverhampton Wanderers"
+                else -> {
+                    "Invalid"
+                }
+            }
+        } ?: "Invalid"
+    }
 }

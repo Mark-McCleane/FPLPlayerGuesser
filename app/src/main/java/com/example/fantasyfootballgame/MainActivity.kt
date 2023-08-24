@@ -105,29 +105,22 @@ class MainActivity : AppCompatActivity() {
         val fplPositionTextView: TextView = findViewById(R.id.text_player_position)
         val teamTextView: TextView = findViewById(R.id.text_team)
 
-        val fplPlayerPosition: String = mRandomElement?.elementType?.let {
-            when (it) {
-                1 -> "GK"
-                2 -> "DEF"
-                3 -> "MID"
-                4 -> "ATT"
-                else -> "INVALID"
-            }
-        } ?: "INVALID"
-
+        val mFplPlayerPosition: String = viewModel.convertPositionIdToFplPosition(mRandomElement)
+        val mFplPlayerTeam: String = viewModel.convertTeamIdToFplTeam(mRandomElement)
 
         cardView.visibility = View.VISIBLE
-        playerNameTextView.text = getString(
-            R.string.player_name_in_display_player_item,
-            mRandomElement?.firstName,
-            mRandomElement?.secondName
-        )
+        playerNameTextView.text =
+            getString(
+                R.string.player_name_in_display_player_item,
+                mRandomElement?.firstName,
+                mRandomElement?.secondName
+            )
         fplPointsTextView.text =
             getString(R.string.fpl_points_in_display_player_item, mRandomElement?.totalPoints)
         fplPositionTextView.text =
-            getString(R.string.fpl_position_in_display_player_item, fplPlayerPosition)
+            getString(R.string.fpl_position_in_display_player_item, mFplPlayerPosition)
         teamTextView.text =
-            getString(R.string.team_in_display_player_item, mRandomElement?.team.toString())
+            getString(R.string.team_in_display_player_item, mFplPlayerTeam)
     }
 
     private fun getData() {
