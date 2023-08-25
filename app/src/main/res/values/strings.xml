@@ -4,4 +4,7 @@
     <string name="fpl_points_in_display_player_item">Total FPL Points: %d</string>
     <string name="fpl_position_in_display_player_item">Position: %s</string>
     <string name="team_in_display_player_item">Team: %s</string>
+    <string name="incorrect_please_try_again">Incorrect, please try again</string>
+    <string name="the_user_is_a_loser">You Lose,The Answer was %s %s!\nPlease Try Again!</string>
+    <string name="the_user_is_a_winner">"Correct with %d guesses"</string>
 </resources>

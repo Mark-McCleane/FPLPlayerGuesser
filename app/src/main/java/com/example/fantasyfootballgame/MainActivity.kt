@@ -1,24 +1,33 @@
 package com.example.fantasyfootballgame
 
+import android.app.Activity
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.fantasyfootballgame.adapter.FplPlayerGuesserAutofillAdapter
 import com.example.fantasyfootballgame.db.FplDatabase
 import com.example.fantasyfootballgame.model.BoostrapStatic.FplEvent
 import com.example.fantasyfootballgame.model.BoostrapStatic.FplPlayer
 import com.example.fantasyfootballgame.repository.FplEventRepository
 import com.example.fantasyfootballgame.repository.FplPlayerRepository
+import com.example.fantasyfootballgame.utils.FplConstants
+import com.example.fantasyfootballgame.utils.FplConstants.BASE_IMG_URL
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var playerImageView: ImageView
+    private var mCorrectGuess: Boolean = false
     private var mRandomPlayer: String? = null
     private var mRandomElement: FplPlayer? = null
     private lateinit var viewModel: MainActivityViewModel
@@ -82,20 +91,40 @@ class MainActivity : AppCompatActivity() {
         if (playerGuesserAutoCompleteTextView.text.toString().trim() == mRandomPlayer?.trim()) {
             snackbar = Snackbar.make(
                 view,
-                "Correct with $counter guesses",
+                getString(R.string.the_user_is_a_winner, counter),
                 Snackbar.LENGTH_INDEFINITE
             )
+            mCorrectGuess = true
+        } else if (counter >= 7) {
+            snackbar = Snackbar.make(
+                view,
+                getString(
+                    R.string.the_user_is_a_loser,
+                    mRandomElement?.firstName,
+                    mRandomElement?.secondName
+                ),
+                Snackbar.LENGTH_INDEFINITE
+            )
+            hideKeyboard(view)
+            submitButton.visibility = View.GONE
+            mCorrectGuess = true
         } else {
             playerGuesserAutoCompleteTextView.setText("")
             submitButton.visibility = View.GONE
             snackbar = Snackbar.make(
                 view,
-                "Incorrect, please try again",
+                getString(R.string.incorrect_please_try_again),
                 Snackbar.LENGTH_SHORT
             )
         }
         displayPlayerItem()
         snackbar.show()
+    }
+
+    private fun hideKeyboard(view: View) {
+        val inputMethodManager =
+            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     private fun displayPlayerItem() {
@@ -104,23 +133,55 @@ class MainActivity : AppCompatActivity() {
         val fplPointsTextView: TextView = findViewById(R.id.text_player_points)
         val fplPositionTextView: TextView = findViewById(R.id.text_player_position)
         val teamTextView: TextView = findViewById(R.id.text_team)
+        playerImageView = findViewById(R.id.image_player_avatar)
 
         val mFplPlayerPosition: String = viewModel.convertPositionIdToFplPosition(mRandomElement)
         val mFplPlayerTeam: String = viewModel.convertTeamIdToFplTeam(mRandomElement)
 
         cardView.visibility = View.VISIBLE
-        playerNameTextView.text =
-            getString(
-                R.string.player_name_in_display_player_item,
-                mRandomElement?.firstName,
-                mRandomElement?.secondName
-            )
-        fplPointsTextView.text =
-            getString(R.string.fpl_points_in_display_player_item, mRandomElement?.totalPoints)
-        fplPositionTextView.text =
-            getString(R.string.fpl_position_in_display_player_item, mFplPlayerPosition)
-        teamTextView.text =
-            getString(R.string.team_in_display_player_item, mFplPlayerTeam)
+        if (mCorrectGuess) {
+            loadImage(mRandomElement?.photo)
+            playerNameTextView.text =
+                getString(
+                    R.string.player_name_in_display_player_item,
+                    mRandomElement?.firstName,
+                    mRandomElement?.secondName
+                )
+            fplPointsTextView.text =
+                getString(R.string.fpl_points_in_display_player_item, mRandomElement?.totalPoints)
+            fplPositionTextView.text =
+                getString(R.string.fpl_position_in_display_player_item, mFplPlayerPosition)
+            teamTextView.text =
+                getString(R.string.team_in_display_player_item, mFplPlayerTeam)
+        }
+        when (counter) {
+            2 -> {
+                fplPointsTextView.text =
+                    getString(
+                        R.string.fpl_points_in_display_player_item,
+                        mRandomElement?.totalPoints
+                    )
+            }
+
+            3 -> {
+                fplPositionTextView.text =
+                    getString(R.string.fpl_position_in_display_player_item, mFplPlayerPosition)
+            }
+
+            4 -> {
+                teamTextView.text =
+                    getString(R.string.team_in_display_player_item, mFplPlayerTeam)
+            }
+
+            5 -> {
+                loadImage(mRandomElement?.photo)
+            }
+        }
+    }
+
+    private fun loadImage(photo: String?) {
+        val photoInPng = photo?.replace(".jpg", ".png")
+        Glide.with(this).load(FplConstants.BASE_IMG_URL + photoInPng).into(playerImageView)
     }
 
     private fun getData() {
@@ -137,6 +198,7 @@ class MainActivity : AppCompatActivity() {
             if (mRandomPlayer.isNullOrEmpty()) {
                 setRandomPlayer()
             }
+
             mAdapter.clear()
             mAdapter.addAll(mFullNameList)
             mAdapter.notifyDataSetChanged()

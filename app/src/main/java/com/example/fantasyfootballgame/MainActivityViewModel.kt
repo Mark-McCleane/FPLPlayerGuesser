@@ -89,8 +89,8 @@ class MainActivityViewModel(
         } ?: "INVALID"
     }
 
-    fun convertTeamIdToFplTeam(mRandomElement: FplPlayer?): String {
-        return mRandomElement?.team?.let {
+    fun convertTeamIdToFplTeam(randomElement: FplPlayer?): String {
+        return randomElement?.team?.let {
             when (it) {
                 1 -> "Arsenal"
                 2 -> "Aston Villa FC"
