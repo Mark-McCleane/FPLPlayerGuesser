@@ -7,4 +7,10 @@ class FplPlayerGuesserAutofillAdapter(
     context: Context,
     resource: Int,
     fplPlayerNameList: List<String>,
-) : ArrayAdapter<String>(context, resource, fplPlayerNameList)
+) : ArrayAdapter<String>(context, resource, fplPlayerNameList) {
+    fun refreshData(newData: List<String>) {
+        clear()
+        addAll(newData)
+        notifyDataSetChanged()
+    }
+}

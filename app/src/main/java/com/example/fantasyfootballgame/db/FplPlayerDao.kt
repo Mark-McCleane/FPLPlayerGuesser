@@ -13,6 +13,6 @@ interface FplPlayerDao {
     suspend fun upsertPlayer(fplPlayer: FplPlayer)
 
 
-    @Query("Select * from fpl_players")
+    @Query("Select * from fpl_players where status is not 'u'")
     fun getAllElements(): LiveData<List<FplPlayer>>
 }
